@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RKNFAN | Тренер по LoL и TFT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0B1119;
+            color: #F0F3FA;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ===== АНИМИРОВАННЫЙ ФОН ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #0B1119 0%, #0F1A2E 30%, #141E3A 60%, #0B1119 100%);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ===== ЧАСТИЦЫ (фон) ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 215, 0, 0.4);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+            box-shadow: 0 0 6px rgba(255, 215, 0, 0.2);
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== НАВИГАЦИЯ ===== */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.08);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFD700, #F59E0B, #FFD700);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmerText 3s ease-in-out infinite;
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes shimmerText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #94A3B8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #FFD700;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: #FFD700 !important;
+            transition: 0.3s;
+        }
+
+        .btn-outline::after {
+            display: none;
+        }
+
+        .btn-outline:hover {
+            background: #FFD700;
+            color: #0B1119 !important;
+            border-color: #FFD700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* ===== ГЕРОЙ ===== */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            padding: 3rem 0 4rem;
+        }
+
+        .hero-content {
+            flex: 1.2;
+            min-width: 300px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.12);
+            color: #FFD700;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.3px;
+            animation: pulseGlow 2s ease-in-out infinite;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.05); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); }
+        }
+
+        .hero-content h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FFD700, #F59E0B, #FFD700);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmerText 4s ease-in-out infinite;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.06);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 2rem;
+            padding: 0.4rem 1.4rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin: 0.5rem 0 1.2rem;
+            color: #FFD700;
+            transition: 0.3s;
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        .rank-badge i {
+            margin-right: 0.5rem;
+        }
+
+        .hero-content p {
+            color: #94A3B8;
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+            margin: 1.5rem 0 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            font-weight: 500;
+            color: #94A3B8;
+        }
+
+        .stat span {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #FFD700;
+            animation: countUp 1.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes countUp {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700, #F59E0B);
+            border: none;
+            padding: 0.9rem 2.2rem;
+            border-radius: 3rem;
+            font-weight: 700;
+            color: #0B1119;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            animation: btnShine 3s ease-in-out infinite;
+        }
+
+        @keyframes btnShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.9rem 2.2rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            color: #E2E8F0;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-ghost:hover {
+            border-color: #FFD700;
+            color: #FFD700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
+            transform: scale(1.02);
+        }
+
+        .hero-image {
+            flex: 0 0 auto;
+            text-align: center;
+            animation: floatIcon 4s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .hero-image i {
+            font-size: 10rem;
+            color: #FFD700;
+            opacity: 0.6;
+            filter: drop-shadow(0 10px 40px rgba(255, 215, 0, 0.15));
+            transition: 0.3s;
+        }
+
+        .hero-image i:hover {
+            opacity: 0.9;
+            filter: drop-shadow(0 10px 60px rgba(255, 215, 0, 0.3));
+        }
+
+        /* ===== ОБЩИЕ СЕКЦИИ ===== */
+        section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .section-title i {
+            color: #FFD700;
+            margin-right: 0.6rem;
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.02) 0%, transparent 70%);
+            animation: glassGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes glassGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+        }
+
+        .glass:hover {
+            border-color: rgba(255, 215, 0, 0.12);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ===== ОБО МНЕ ===== */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #FFD700;
+            object-fit: cover;
+            background: #1A2332;
+            flex-shrink: 0;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.08);
+            transition: 0.4s;
+            animation: avatarGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes avatarGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.05); }
+            50% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.15); }
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05) rotate(-3deg);
+            border-color: #F59E0B;
+        }
+
+        .profile-header h2 {
+            font-size: 1.8rem;
+        }
+
+        .profile-header .sub {
+            color: #94A3B8;
+            font-size: 0.95rem;
+        }
+
+        .profile-header .sub i {
+            margin-right: 0.3rem;
+            color: #FFD700;
+        }
+
+        .champion-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0 1.5rem;
+        }
+
+        .champion-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 2rem;
+            padding: 0.3rem 1rem 0.3rem 0.4rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.3s;
+            cursor: default;
+        }
+
+        .champion-tag:hover {
+            background: rgba(255, 215, 0, 0.12);
+            border-color: rgba(255, 215, 0, 0.3);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.08);
+        }
+
+        .champion-tag strong {
+            color: #FFD700;
+        }
+
+        .champion-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            object-fit: cover;
+            background: #0B1119;
+            flex-shrink: 0;
+            transition: 0.3s;
+        }
+
+        .champion-tag:hover .champion-icon {
+            border-color: #FFD700;
+            transform: scale(1.1);
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 215, 0, 0.05);
+            border-color: rgba(255, 215, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .feature-item i {
+            font-size: 1.4rem;
+            color: #FFD700;
+            width: 2rem;
+            text-align: center;
+        }
+
+        /* ===== TFT ===== */
+        .tft-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tft-info {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .tft-rank-box {
+            flex: 0 0 auto;
+            background: rgba(255, 215, 0, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.12);
+            border-radius: 2rem;
+            padding: 2rem 2.5rem;
+            text-align: center;
+            transition: 0.4s;
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        .tft-rank-box:hover {
+            transform: scale(1.03);
+            border-color: rgba(255, 215, 0, 0.25);
+            box-shadow: 0 8px 40px rgba(255, 215, 0, 0.05);
+        }
+
+        .tft-rank-box i {
+            font-size: 4rem;
+            color: #FFD700;
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        .tft-rank-box .rank {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #FFD700;
+            margin-top: 0.3rem;
+        }
+
+        .tft-rank-box .label {
+            color: #94A3B8;
+            font-size: 0.85rem;
+        }
+
+        .tft-stats {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .tft-stats div {
+            font-weight: 500;
+            color: #94A3B8;
+            transition: 0.3s;
+        }
+
+        .tft-stats div:hover {
+            color: #F0F3FA;
+        }
+
+        .tft-stats strong {
+            color: #F0F3FA;
+        }
+
+        /* ===== ЦЕНЫ (ОБНОВЛЕНЫ) ===== */
+        .cards-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            justify-content: center;
+        }
+
+        .price-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 1.8rem;
+            padding: 2rem 1.8rem;
+            width: 270px;
+            text-align: center;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.03) 0%, transparent 70%);
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .price-card:hover::before {
+            opacity: 1;
+        }
+
+        .price-card:hover {
+            border-color: rgba(255, 215, 0, 0.2);
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .price-card i {
+            font-size: 2.2rem;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+            transition: 0.3s;
+        }
+
+        .price-card:hover i {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .price {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #FFD700;
+            margin: 0.5rem 0;
+        }
+
+        .price small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #94A3B8;
+        }
+
+        .price-card .desc {
+            color: #94A3B8;
+            font-size: 0.95rem;
+            margin: 0.5rem 0;
+        }
+
+        .price-card .tag {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.06);
+            border-radius: 2rem;
+            padding: 0.2rem 1rem;
+            font-size: 0.75rem;
+            color: #FFD700;
+            font-weight: 600;
+            margin-top: 0.3rem;
+            transition: 0.3s;
+        }
+
+        .price-card:hover .tag {
+            background: rgba(255, 215, 0, 0.12);
+        }
+
+        /* ===== КОНТАКТЫ ===== */
+        .contacts-box {
+            text-align: center;
+            padding: 2.5rem;
+        }
+
+        .contacts-box h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contacts-box p {
+            color: #94A3B8;
+            margin-bottom: 1.5rem;
+        }
+
+        .contacts-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tg-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0.8rem 1.8rem;
+            border-radius: 3rem;
+            color: #F0F3FA;
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .tg-link:hover {
+            border-color: #FFD700;
+            color: #FFD700;
+            background: rgba(255, 215, 0, 0.05);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.05);
+        }
+
+        .tg-link i {
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .tg-link:hover i {
+            transform: scale(1.1);
+        }
+
+        /* ===== ПОПАП ===== */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .popup-content {
+            background: #141E2B;
+            border-radius: 2rem;
+            max-width: 440px;
+            width: 92%;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .popup-content h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .popup-content p {
+            color: #94A3B8;
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .close-popup {
+            position: absolute;
+            right: 1.2rem;
+            top: 1rem;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #64748B;
+            transition: 0.3s;
+        }
+
+        .close-popup:hover {
+            color: #FFD700;
+            transform: rotate(90deg);
+        }
+
+        .popup input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            margin: 0.6rem 0;
+            background: #1A2738;
+            border: 1px solid #2A3A50;
+            border-radius: 1rem;
+            color: #F0F3FA;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .popup input:focus {
+            border-color: #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.05);
+        }
+
+        .popup .btn-primary {
+            width: 100%;
+            margin-top: 0.8rem;
+        }
+
+        .calc-result {
+            margin-top: 1rem;
+            font-weight: 600;
+            background: rgba(255, 215, 0, 0.06);
+            padding: 0.8rem;
+            border-radius: 1rem;
+            color: #FFD700;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        /* ===== ФУТЕР ===== */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            color: #64748B;
+            font-size: 0.9rem;
+        }
+
+        footer span {
+            color: #FFD700;
+            transition: 0.3s;
+        }
+
+        footer span:hover {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        /* ===== АНИМАЦИЯ ПОЯВЛЕНИЯ ===== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.6rem;
+            }
+
+            .hero-stats {
+                gap: 1.2rem;
+            }
+
+            .stat span {
+                font-size: 1.5rem;
+            }
+
+            .profile-header {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .profile-avatar {
+                width: 70px;
+                height: 70px;
+            }
+
+            .hero-image i {
+                font-size: 6rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .tft-rank-box {
+                padding: 1.5rem;
+                width: 100%;
+            }
+
+            .price-card {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .hero-image {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== ЧАСТИЦЫ НА ФОНЕ ===== -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <!-- ===== НАВИГАЦИЯ ===== -->
+        <nav>
+            <div class="logo">⚔️ RKNFAN</div>
+            <div class="nav-links">
+                <a href="#about">Обо мне</a>
+                <a href="#tft">TFT</a>
+                <a href="#prices">Цены</a>
+                <a href="#contacts" class="btn-outline">Связаться</a>
+            </div>
+        </nav>
+
+        <!-- ===== ГЕРОЙ ===== -->
+        <section class="hero fade-up">
+            <div class="hero-content">
+                <div class="hero-badge"><i class="fas fa-gamepad"></i> Тренер по League of Legends</div>
+                <h1>Прокачай свой лес<br>до <span class="gradient-text">Изумруда и выше</span></h1>
+                <div class="rank-badge">
+                    <i class="fas fa-trophy"></i> Изумруд 4 · RU сервер · Лес
+                </div>
+                <p>Контроль карты, видение, правильные ганки и давление на карте. Помогу тебе подняться до Изумруда и выше на основе реального опыта.</p>
+                <div class="hero-stats">
+                    <div class="stat"><span class="counter" data-target="53.1">0</span>% побед (лес)</div>
+                    <div class="stat"><span class="counter" data-target="400">0</span>+ игр / сезон</div>
+                    <div class="stat"><span class="counter" data-target="4">0</span> Изумруд</div>
+                </div>
+                <div class="cta-group">
+                    <button class="btn-primary" id="openPopupBtn">🎮 Бесплатный пробный урок</button>
+                    <a href="#prices" class="btn-ghost">Смотреть цены →</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <i class="fas fa-tree"></i>
+            </div>
+        </section>
+
+        <!-- ===== ОБО МНЕ ===== -->
+        <section id="about" class="fade-up">
+            <div class="glass">
+                <div style="display: flex; flex-wrap: wrap; gap: 2.5rem;">
+                    <div style="flex: 1; min-width: 280px;">
+                        <div class="profile-header">
+                            <img src="https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon6926.jpg?image=q_auto:good,f_webp,w_200&v=1782288722"
+                                 alt="Аватар RKNFAN"
+                                 class="profile-avatar">
+                            <div>
+                                <h2>Привет! Я <span style="color: #FFD700;">RKNFAN#MAX</span></h2>
+                                <div class="sub">
+                                    <i class="fas fa-map-pin"></i> RU сервер · Изумруд 4 · Лес
+                                </div>
+                            </div>
+                        </div>
+
+                        <p style="color: #CBD5E1; margin-bottom: 1rem;">
+                            Мой текущий ранг — <strong style="color: #FFD700;">Изумруд 4</strong> на RU сервере. Основная роль — <strong style="color: #FFD700;">Лес</strong>. За последние 120 дней сыграл <strong style="color: #FFD700;">более 400 игр</strong> с винрейтом <strong style="color: #FFD700;">53.1%</strong> на лесной позиции.
+                        </p>
+
+                        <p style="font-weight: 600; margin-bottom: 0.5rem;">📊 Мои лучшие чемпионы:</p>
+                        <div class="champion-grid">
+                            <div class="champion-tag">
+                                <img src="https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/Zac.png" alt="Зак" class="champion-icon" loading="lazy">
+                                <strong>Зак (Zac)</strong> — 65.8% · 38 игр
+                            </div>
+                            <div class="champion-tag">
+                                <img src="https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/JarvanIV.png" alt="Джарван IV" class="champion-icon" loading="lazy">
+                                <strong>Джарван IV</strong> — 58.7% · 63 игры
+                            </div>
+                            <div class="champion-tag">
+                                <img src="https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/Vi.png" alt="Вай" class="champion-icon" loading="lazy">
+                                <strong>Вай</strong> — 52.5% · 59 игр
+                            </div>
+                            <div class="champion-tag">
+                                <img src="https://ddragon.leagueoflegends.com/cdn/14.10.1/img/champion/Viego.png" alt="Вьего" class="champion-icon" loading="lazy">
+                                <strong>Вьего</strong> — 53.6% · 28 игр
+                            </div>
+                        </div>
+
+                        <p style="color: #94A3B8; font-size: 0.95rem;">
+                            🎯 <strong style="color: #F0F3FA;">Мой стиль игры (GPI):</strong> контроль видения, правильные ганки, постоянная угроза на карте.
+                        </p>
+                    </div>
+
+                    <div style="flex: 1; min-width: 200px;">
+                        <div class="features-list">
+                            <div class="feature-item"><i class="fas fa-chart-line"></i> Разбор твоих replay</div>
+                            <div class="feature-item"><i class="fas fa-eye"></i> Контроль видения и карты</div>
+                            <div class="feature-item"><i class="fas fa-clock"></i> Правильные моменты для ганков</div>
+                            <div class="feature-item"><i class="fas fa-champions"></i> Обучение на лучших чемпионах</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TFT ===== -->
+        <section id="tft" class="fade-up">
+            <h2 class="section-title"><i class="fas fa-chess-board"></i> TFT</h2>
+            <div class="glass">
+                <div class="tft-grid">
+                    <div class="tft-info">
+                        <h3 style="font-size: 1.6rem; margin-bottom: 0.5rem;">Прошлый сет — <span style="color: #FFD700;">Алмаз</span></h3>
+                        <p style="color: #94A3B8; margin-bottom: 1rem;">
+                            Любимые композиции: <strong style="color: #F0F3FA;">Быстрострелы</strong>, <strong style="color: #F0F3FA;">Мистики</strong> и <strong style="color: #F0F3FA;">Драконы</strong>.
+                        </p>
+                        <div class="tft-stats">
+                            <div><i class="fas fa-trophy" style="color: #FFD700;"></i> <strong>Топ-4:</strong> 62%</div>
+                            <div><i class="fas fa-crown" style="color: #FFD700;"></i> <strong>Побед:</strong> 18</div>
+                            <div><i class="fas fa-users" style="color: #FFD700;"></i> <strong>Сыграно:</strong> 120+</div>
+                        </div>
+                        <p style="color: #94A3B8; font-size: 0.9rem;">
+                            <i class="fas fa-info-circle" style="color: #FFD700;"></i> Умею объяснять экономию, переходы между композициями и правильный выбор аугментов.
+                        </p>
+                    </div>
+                    <div class="tft-rank-box">
+                        <i class="fas fa-chess-queen"></i>
+                        <div class="rank">Алмаз</div>
+                        <div class="label">TFT</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ЦЕНЫ (ОБНОВЛЕНЫ) ===== -->
+        <section id="prices" class="fade-up">
+            <h2 class="section-title"><i class="fas fa-coins"></i> Стоимость тренировок</h2>
+            <div class="cards-grid">
+                <div class="price-card">
+                    <i class="fas fa-laptop"></i>
+                    <div class="price">500 ₽ <small>/ 60 мин</small></div>
+                    <div class="desc">Разбор replay + live игра</div>
+                    <div class="tag">🎯 Фокус: лес</div>
+                </div>
+                <div class="price-card">
+                    <i class="fas fa-chart-simple"></i>
+                    <div class="price">1000 ₽ <small>/ 90 мин</small></div>
+                    <div class="desc">Полный анализ + теория + практика</div>
+                    <div class="tag">📊 Ганки / видение / макро</div>
+                </div>
+                <div class="price-card">
+                    <i class="fas fa-crown"></i>
+                    <div class="price">1800 ₽ <small>/ 2 часа</small></div>
+                    <div class="desc">Интенсивная подготовка + БО3 сессия</div>
+                    <div class="tag">🏆 Цель: поднятие ранга</div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 2.5rem; color: #94A3B8;">
+                ✅ Первое занятие — <strong style="color: #FFD700;">бесплатно</strong> (30–40 минут, знакомство и диагностика)
+            </p>
+        </section>
+
+        <!-- ===== КОНТАКТЫ ===== -->
+        <section id="contacts" class="fade-up">
+            <div class="glass contacts-box">
+                <h3>Как начать тренировки?</h3>
+                <p>Напиши мне в Telegram — договоримся о <strong style="color: #FFD700;">бесплатном пробном занятии</strong>.</p>
+                <div class="contacts-links">
+                    <a href="https://t.me/uselesslives" target="_blank" class="tg-link">
+                        <i class="fab fa-telegram"></i> @uselesslives
+                    </a>
+                    <a href="tel:+79143433983" class="tg-link">
+                        <i class="fas fa-phone-alt"></i> +7 914 343-39-83
+                    </a>
+                </div>
+                <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #64748B;">
+                    📌 В первом сообщении укажи: текущий ранг, основную роль и цель — я отвечу в течение часа.
+                </p>
+            </div>
+        </section>
+
+        <!-- ===== ФУТЕР ===== -->
+        <footer>
+            <p>© 2025 <span>RKNFAN#MAX</span> — Тренер по League of Legends · Изумруд 4 · Лес · TFT Алмаз</p>
+        </footer>
+    </div>
+
+    <!-- ===== ПОПАП ===== -->
+    <div id="callbackPopup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup">&times;</span>
+            <h3>🎮 Бесплатный пробный урок</h3>
+            <p>Познакомимся, определим твой уровень и цели</p>
+            <input type="text" id="studentName" placeholder="Твой ник в игре или имя">
+            <input type="text" id="studentRank" placeholder="Текущий ранг (например, Золото 3)">
+            <input type="text" id="studentRole" placeholder="Основная роль">
+            <button class="btn-primary" id="sendRequestBtn">Записаться на пробный</button>
+            <div class="calc-result" id="calcMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== ГЕНЕРАЦИЯ ЧАСТИЦ =====
+        (function createParticles() {
+            const container = document.getElementById('particles');
+            const count = 35;
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDuration = (Math.random() * 20 + 15) + 's';
+                particle.style.animationDelay = (Math.random() * 20) + 's';
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                container.appendChild(particle);
+            }
+        })();
+
+        // ===== АНИМАЦИЯ СЧЁТЧИКОВ =====
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = parseFloat(counter.dataset.target);
+                const isFloat = target % 1 !== 0;
+                let current = 0;
+                const step = target / 40;
+                const updateCounter = () => {
+                    current += step;
+                    if (current >= target) {
+                        current = target;
+                        counter.textContent = isFloat ? target.toFixed(1) : Math.round(target);
+                        return;
+                    }
+                    counter.textContent = isFloat ? current.toFixed(1) : Math.round(current);
+                    requestAnimationFrame(updateCounter);
+                };
+                updateCounter();
+            });
+        }
+
+        setTimeout(animateCounters, 500);
+
+        // ===== АНИМАЦИЯ ПРИ СКРОЛЛЕ =====
+        const fadeElements = document.querySelectorAll('.fade-up');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        fadeElements.forEach(el => observer.observe(el));
+
+        // ===== МОДАЛЬНОЕ ОКНО =====
+        const popup = document.getElementById('callbackPopup');
+        const openBtn = document.getElementById('openPopupBtn');
+        const closeBtn = document.querySelector('.close-popup');
+
+        openBtn.addEventListener('click', () => {
+            popup.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+
+        const closePopup = () => {
+            popup.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        closeBtn.addEventListener('click', closePopup);
+        window.addEventListener('click', (e) => {
+            if (e.target === popup) closePopup();
+        });
+
+        // ===== ОТПРАВКА ФОРМЫ =====
+        const sendBtn = document.getElementById('sendRequestBtn');
+        const calcMsgDiv = document.getElementById('calcMessage');
+
+        sendBtn.addEventListener('click', () => {
+            const name = document.getElementById('studentName').value.trim();
+            const rank = document.getElementById('studentRank').value.trim();
+            const role = document.getElementById('studentRole').value.trim();
+
+            if (!name) {
+                alert('Пожалуйста, укажи свой ник или имя :)');
+                return;
+            }
+
+            calcMsgDiv.style.display = 'block';
+            calcMsgDiv.innerHTML = `✅ Спасибо, ${name}! Я RKNFAN — свяжусь с тобой в течение часа. (Ранг: ${rank || '—'}, роль: ${role || '—'})`;
+
+            setTimeout(() => {
+                if (confirm('Хочешь сразу перейти в Telegram, чтобы ускорить начало?')) {
+                    window.open('https://t.me/uselesslives', '_blank');
+                }
+                closePopup();
+            }, 1500);
+
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentRank').value = '';
+            document.getElementById('studentRole').value = '';
+            setTimeout(() => { calcMsgDiv.style.display = 'none'; }, 4000);
+        });
+
+        // ===== АВТОМАТИЧЕСКОЕ ПОЯВЛЕНИЕ ПРИ ЗАГРУЗКЕ =====
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                fadeElements.forEach(el => {
+                    if (el.getBoundingClientRect().top < window.innerHeight - 80) {
+                        el.classList.add('visible');
+                    }
+                });
+            }, 200);
+        });
+    </script>
+
+</body>
+</html>
